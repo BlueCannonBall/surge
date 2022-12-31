@@ -1,4 +1,4 @@
-# surge
+# My fork of surge (used in my engine)
 ## A fast bitboard-based legal chess move generator, written in C++
 ### Features:
 * Magic Bitboard sliding attacks and pre-generated attack tables
