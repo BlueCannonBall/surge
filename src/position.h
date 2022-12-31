@@ -109,13 +109,7 @@ public:
     }
 
     Position(const std::string& fen) :
-        piece_bb {0},
-        board {},
-        side_to_play(WHITE),
-        game_ply(0),
-        hash(0),
-        checkers(0),
-        pinned(0) {
+        Position() {
         // Sets all squares on the board as empty
         for (int i = 0; i < 64; i++) board[i] = NO_PIECE;
         history[0] = UndoInfo();
@@ -175,7 +169,6 @@ public:
     void move_piece_quiet(Square from, Square to);
 
     friend std::ostream& operator<<(std::ostream& os, const Position& p);
-    static void set(const std::string& fen, Position& p);
     std::string fen() const;
 
     // Position& operator=(const Position&) = delete;
