@@ -755,6 +755,7 @@ public:
     const Move* begin() const { return list; }
     const Move* end() const { return last; }
     size_t size() const { return last - list; }
+    bool empty() const { return size() == 0; }
 
 private:
     Move list[218];
