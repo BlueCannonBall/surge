@@ -110,10 +110,16 @@ constexpr int DEBRUIJN64[64] = {
 
 const Bitboard MAGIC = 0x03f79d71b4cb0a89;
 
-// Returns the index of the least significant bit in the bitboard
+// Fast bsf
+Square bsf_fast(Bitboard b) {
+    return Square(__builtin_ffsll(b));
+}
+
+// Returns the index of the least significant bit in the bitboard (slow bsf)
 // constexpr Square bsf(Bitboard b) {
 Square bsf(Bitboard b) {
-    return Square(__builtin_ffsll(b) - 1);
+    return Square(bsf_fast(b));
+    return Square(DEBRUIJN64[MAGIC * (b ^ (b - 1)) >> 58]);
 }
 
 // Returns the index of the least significant bit in the bitboard, and removes the bit from the bitboard
