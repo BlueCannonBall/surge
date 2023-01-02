@@ -92,7 +92,7 @@ int pop_count(Bitboard x) {
 }
 
 // ~~Returns number of set bits in the bitboard. Faster than pop_count(x) when the bitboard has few set bits~~
-// Now uses normal pop_count
+// Now uses regular pop_count
 // gk inline int sparse_pop_count(Bitboard x) {
 int sparse_pop_count(Bitboard x) {
     return pop_count(x);
