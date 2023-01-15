@@ -320,6 +320,29 @@ public:
         return flags() == PR_KNIGHT || flags() == PR_BISHOP || flags() == PR_ROOK || flags() == PR_QUEEN || flags() == PC_KNIGHT || flags() == PC_BISHOP || flags() == PC_ROOK || flags() == PC_QUEEN;
     }
 
+    PieceType promotion() const {
+        switch (flags()) {
+            case PR_KNIGHT:
+            case PC_KNIGHT:
+                return KNIGHT;
+
+            case PR_BISHOP:
+            case PC_BISHOP:
+                return BISHOP;
+
+            case PR_ROOK:
+            case PC_ROOK:
+                return ROOK;
+
+            case PR_QUEEN:
+            case PC_QUEEN:
+                return QUEEN;
+
+            default:
+                throw std::logic_error("Not a promotion");
+        }
+    }
+
     void operator=(Move m) { move = m.move; }
     bool operator==(Move a) const { return to_from() == a.to_from(); }
     bool operator!=(Move a) const { return to_from() != a.to_from(); }
