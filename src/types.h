@@ -313,7 +313,11 @@ public:
     inline MoveFlags flags() const { return MoveFlags((move >> 12) & 0xf); }
 
     inline bool is_capture() const {
-        return (move >> 12) & CAPTURES;
+        return flags() == CAPTURE || flags() == PC_KNIGHT || flags() == PC_BISHOP || flags() == PC_ROOK || flags() == PC_QUEEN || flags() == EN_PASSANT;
+    }
+
+    inline bool is_promotion() const {
+        return flags() == PR_KNIGHT || flags() == PR_BISHOP || flags() == PR_ROOK || flags() == PR_QUEEN || flags() == PC_KNIGHT || flags() == PC_BISHOP || flags() == PC_ROOK || flags() == PC_QUEEN;
     }
 
     void operator=(Move m) { move = m.move; }
