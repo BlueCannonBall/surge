@@ -320,6 +320,10 @@ public:
         return flags() == PR_KNIGHT || flags() == PR_BISHOP || flags() == PR_ROOK || flags() == PR_QUEEN || flags() == PC_KNIGHT || flags() == PC_BISHOP || flags() == PC_ROOK || flags() == PC_QUEEN;
     }
 
+    inline bool is_castling() const {
+        return flags() == OO || flags() == OOO;
+    }
+
     PieceType promotion() const {
         switch (flags()) {
             case PR_KNIGHT:
