@@ -113,7 +113,7 @@ const Bitboard MAGIC = 0x03f79d71b4cb0a89;
 // Returns the index of the least significant bit in the bitboard
 // constexpr Square bsf(Bitboard b) {
 Square bsf(Bitboard b) {
-    return Square(b ? __builtin_ffsll(b) - 1 : 63);
+    return Square(__builtin_ctzll(b));
     // return Square(DEBRUIJN64[MAGIC * (b ^ (b - 1)) >> 58]);
 }
 
