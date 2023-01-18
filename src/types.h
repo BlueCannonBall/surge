@@ -311,6 +311,10 @@ public:
     inline int to_from() const { return move & 0xffff; }
     inline MoveFlags flags() const { return MoveFlags((move >> 12) & 0xf); }
 
+    inline bool is_null() const {
+        return move == 0;
+    }
+
     inline bool is_capture() const {
         return flags() == CAPTURE || flags() == PC_KNIGHT || flags() == PC_BISHOP || flags() == PC_ROOK || flags() == PC_QUEEN || flags() == EN_PASSANT;
     }
