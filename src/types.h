@@ -312,7 +312,7 @@ public:
     inline MoveFlags flags() const { return MoveFlags((move >> 12) & 0xf); }
 
     inline bool is_null() const {
-        return move == 0;
+        return to_from() == 0;
     }
 
     inline bool is_capture() const {
