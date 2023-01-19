@@ -12,6 +12,13 @@ enum Color : int {
     BLACK
 };
 
+inline Color& operator++(Color& c) {
+    return c = Color(int(c) + 1);
+}
+inline Color& operator--(Color& c) {
+    return c = Color(int(c) - 1);
+}
+
 // Inverts the color (WHITE -> BLACK) and (BLACK -> WHITE)
 constexpr Color operator~(Color c) {
     return Color(c ^ BLACK);
