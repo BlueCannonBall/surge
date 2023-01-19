@@ -40,6 +40,12 @@ enum PieceType : int {
     QUEEN,
     KING
 };
+inline PieceType& operator++(PieceType& pc) {
+    return pc = PieceType(int(pc) + 1);
+}
+inline PieceType& operator--(PieceType& pc) {
+    return pc = PieceType(int(pc) - 1);
+}
 
 // PIECE_STR[piece] is the algebraic chess representation of that piece
 const std::string PIECE_STR = "PNBRQK~>pnbrqk.";
@@ -66,6 +72,12 @@ enum Piece : int {
     BLACK_KING,
     NO_PIECE
 };
+inline Piece& operator++(Piece& p) {
+    return p = Piece(int(p) + 1);
+}
+inline Piece& operator--(Piece& p) {
+    return p = Piece(int(p) - 1);
+}
 
 constexpr Piece make_piece(Color c, PieceType pt) {
     return Piece((c << 3) + pt);
@@ -153,6 +165,9 @@ enum Square : int {
 inline Square& operator++(Square& s) {
     return s = Square(int(s) + 1);
 }
+inline Square& operator--(Square& s) {
+    return s = Square(int(s) - 1);
+}
 constexpr Square operator+(Square s, Direction d) {
     return Square(int(s) + int(d));
 }
@@ -177,6 +192,25 @@ enum File : int {
     HFILE
 };
 
+inline File& operator++(File& f) {
+    return f = File(int(f) + 1);
+}
+inline File& operator--(File& f) {
+    return f = File(int(f) - 1);
+}
+constexpr File operator+(File a, File b) {
+    return File(int(a) + int(b));
+}
+constexpr File operator-(File a, File b) {
+    return File(int(a) - int(b));
+}
+inline File& operator+=(File& a, File b) {
+    return a = a + b;
+}
+inline File& operator-=(File& a, File b) {
+    return a = a - b;
+}
+
 enum Rank : int {
     RANK1,
     RANK2,
@@ -187,6 +221,25 @@ enum Rank : int {
     RANK7,
     RANK8
 };
+
+inline Rank& operator++(Rank& r) {
+    return r = Rank(int(r) + 1);
+}
+inline Rank& operator--(Rank& r) {
+    return r = Rank(int(r) - 1);
+}
+constexpr Rank operator+(Rank a, Rank b) {
+    return Rank(int(a) + int(b));
+}
+constexpr Rank operator-(Rank a, Rank b) {
+    return Rank(int(a) - int(b));
+}
+inline Rank& operator+=(Rank& a, Rank b) {
+    return a = a + b;
+}
+inline Rank& operator-=(Rank& a, Rank b) {
+    return a = a - b;
+}
 
 extern const char* SQSTR[65];
 
