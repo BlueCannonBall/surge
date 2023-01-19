@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-const size_t NCOLORS = 2;
+const int NCOLORS = 2;
 enum Color : int {
     WHITE,
     BLACK
@@ -17,7 +17,7 @@ constexpr Color operator~(Color c) {
     return Color(c ^ BLACK);
 }
 
-const size_t NDIRS = 8;
+const int NDIRS = 8;
 enum Direction : int {
     NORTH = 8,
     NORTH_EAST = 9,
@@ -31,7 +31,7 @@ enum Direction : int {
     SOUTH_SOUTH = -16
 };
 
-const size_t NPIECE_TYPES = 6;
+const int NPIECE_TYPES = 6;
 enum PieceType : int {
     PAWN,
     KNIGHT,
@@ -40,6 +40,7 @@ enum PieceType : int {
     QUEEN,
     KING
 };
+
 inline PieceType& operator++(PieceType& pc) {
     return pc = PieceType(int(pc) + 1);
 }
@@ -56,7 +57,7 @@ const std::string DEFAULT_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w K
 // The Kiwipete position, used for perft debugging
 const std::string KIWIPETE = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq -";
 
-const size_t NPIECES = 15;
+const int NPIECES = 15;
 enum Piece : int {
     WHITE_PAWN,
     WHITE_KNIGHT,
@@ -72,6 +73,7 @@ enum Piece : int {
     BLACK_KING,
     NO_PIECE
 };
+
 inline Piece& operator++(Piece& p) {
     return p = Piece(int(p) + 1);
 }
@@ -93,7 +95,7 @@ constexpr Color color_of(Piece pc) {
 
 typedef uint64_t Bitboard;
 
-const size_t NSQUARES = 64;
+const int NSQUARES = 64;
 enum Square : int {
     a1,
     b1,
