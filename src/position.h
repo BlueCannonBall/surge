@@ -277,153 +277,149 @@ template <Color C>
 void Position::play(const Move m) {
     side_to_play = ~side_to_play;
     ++game_ply;
-    if (!m.is_null()) {
-        history[game_ply] = UndoInfo(history[game_ply - 1]);
+    history[game_ply] = UndoInfo(history[game_ply - 1]);
 
-        MoveFlags type = m.flags();
-        history[game_ply].entry |= SQUARE_BB[m.to()] | SQUARE_BB[m.from()];
+    MoveFlags type = m.flags();
+    history[game_ply].entry |= SQUARE_BB[m.to()] | SQUARE_BB[m.from()];
 
-        switch (type) {
-            case QUIET:
-                // The to square is guaranteed to be empty here
-                move_piece_quiet(m.from(), m.to());
-                break;
-            case DOUBLE_PUSH:
-                // The to square is guaranteed to be empty here
-                move_piece_quiet(m.from(), m.to());
+    switch (type) {
+        case QUIET:
+            // The to square is guaranteed to be empty here
+            move_piece_quiet(m.from(), m.to());
+            break;
+        case DOUBLE_PUSH:
+            // The to square is guaranteed to be empty here
+            move_piece_quiet(m.from(), m.to());
 
-                // This is the square behind the pawn that was double-pushed
-                history[game_ply].epsq = m.from() + relative_dir<C>(NORTH);
-                break;
-            case OO:
-                if (C == WHITE) {
-                    move_piece_quiet(e1, g1);
-                    move_piece_quiet(h1, f1);
-                } else {
-                    move_piece_quiet(e8, g8);
-                    move_piece_quiet(h8, f8);
-                }
-                break;
-            case OOO:
-                if (C == WHITE) {
-                    move_piece_quiet(e1, c1);
-                    move_piece_quiet(a1, d1);
-                } else {
-                    move_piece_quiet(e8, c8);
-                    move_piece_quiet(a8, d8);
-                }
-                break;
-            case EN_PASSANT:
-                move_piece_quiet(m.from(), m.to());
-                remove_piece(m.to() + relative_dir<C>(SOUTH));
-                break;
-            case PR_KNIGHT:
-                remove_piece(m.from());
-                put_piece(make_piece(C, KNIGHT), m.to());
-                break;
-            case PR_BISHOP:
-                remove_piece(m.from());
-                put_piece(make_piece(C, BISHOP), m.to());
-                break;
-            case PR_ROOK:
-                remove_piece(m.from());
-                put_piece(make_piece(C, ROOK), m.to());
-                break;
-            case PR_QUEEN:
-                remove_piece(m.from());
-                put_piece(make_piece(C, QUEEN), m.to());
-                break;
-            case PC_KNIGHT:
-                remove_piece(m.from());
-                history[game_ply].captured = board[m.to()];
-                remove_piece(m.to());
+            // This is the square behind the pawn that was double-pushed
+            history[game_ply].epsq = m.from() + relative_dir<C>(NORTH);
+            break;
+        case OO:
+            if (C == WHITE) {
+                move_piece_quiet(e1, g1);
+                move_piece_quiet(h1, f1);
+            } else {
+                move_piece_quiet(e8, g8);
+                move_piece_quiet(h8, f8);
+            }
+            break;
+        case OOO:
+            if (C == WHITE) {
+                move_piece_quiet(e1, c1);
+                move_piece_quiet(a1, d1);
+            } else {
+                move_piece_quiet(e8, c8);
+                move_piece_quiet(a8, d8);
+            }
+            break;
+        case EN_PASSANT:
+            move_piece_quiet(m.from(), m.to());
+            remove_piece(m.to() + relative_dir<C>(SOUTH));
+            break;
+        case PR_KNIGHT:
+            remove_piece(m.from());
+            put_piece(make_piece(C, KNIGHT), m.to());
+            break;
+        case PR_BISHOP:
+            remove_piece(m.from());
+            put_piece(make_piece(C, BISHOP), m.to());
+            break;
+        case PR_ROOK:
+            remove_piece(m.from());
+            put_piece(make_piece(C, ROOK), m.to());
+            break;
+        case PR_QUEEN:
+            remove_piece(m.from());
+            put_piece(make_piece(C, QUEEN), m.to());
+            break;
+        case PC_KNIGHT:
+            remove_piece(m.from());
+            history[game_ply].captured = board[m.to()];
+            remove_piece(m.to());
 
-                put_piece(make_piece(C, KNIGHT), m.to());
-                break;
-            case PC_BISHOP:
-                remove_piece(m.from());
-                history[game_ply].captured = board[m.to()];
-                remove_piece(m.to());
+            put_piece(make_piece(C, KNIGHT), m.to());
+            break;
+        case PC_BISHOP:
+            remove_piece(m.from());
+            history[game_ply].captured = board[m.to()];
+            remove_piece(m.to());
 
-                put_piece(make_piece(C, BISHOP), m.to());
-                break;
-            case PC_ROOK:
-                remove_piece(m.from());
-                history[game_ply].captured = board[m.to()];
-                remove_piece(m.to());
+            put_piece(make_piece(C, BISHOP), m.to());
+            break;
+        case PC_ROOK:
+            remove_piece(m.from());
+            history[game_ply].captured = board[m.to()];
+            remove_piece(m.to());
 
-                put_piece(make_piece(C, ROOK), m.to());
-                break;
-            case PC_QUEEN:
-                remove_piece(m.from());
-                history[game_ply].captured = board[m.to()];
-                remove_piece(m.to());
+            put_piece(make_piece(C, ROOK), m.to());
+            break;
+        case PC_QUEEN:
+            remove_piece(m.from());
+            history[game_ply].captured = board[m.to()];
+            remove_piece(m.to());
 
-                put_piece(make_piece(C, QUEEN), m.to());
-                break;
-            case CAPTURE:
-                history[game_ply].captured = board[m.to()];
-                move_piece(m.from(), m.to());
+            put_piece(make_piece(C, QUEEN), m.to());
+            break;
+        case CAPTURE:
+            history[game_ply].captured = board[m.to()];
+            move_piece(m.from(), m.to());
 
-                break;
-        }
+            break;
     }
 }
 
 // Undos a move in the current position, rolling it back to the previous position
 template <Color C>
 void Position::undo(const Move m) {
-    if (!m.is_null()) {
-        MoveFlags type = m.flags();
-        switch (type) {
-            case QUIET:
-                move_piece_quiet(m.to(), m.from());
-                break;
-            case DOUBLE_PUSH:
-                move_piece_quiet(m.to(), m.from());
-                break;
-            case OO:
-                if (C == WHITE) {
-                    move_piece_quiet(g1, e1);
-                    move_piece_quiet(f1, h1);
-                } else {
-                    move_piece_quiet(g8, e8);
-                    move_piece_quiet(f8, h8);
-                }
-                break;
-            case OOO:
-                if (C == WHITE) {
-                    move_piece_quiet(c1, e1);
-                    move_piece_quiet(d1, a1);
-                } else {
-                    move_piece_quiet(c8, e8);
-                    move_piece_quiet(d8, a8);
-                }
-                break;
-            case EN_PASSANT:
-                move_piece_quiet(m.to(), m.from());
-                put_piece(make_piece(~C, PAWN), m.to() + relative_dir<C>(SOUTH));
-                break;
-            case PR_KNIGHT:
-            case PR_BISHOP:
-            case PR_ROOK:
-            case PR_QUEEN:
-                remove_piece(m.to());
-                put_piece(make_piece(C, PAWN), m.from());
-                break;
-            case PC_KNIGHT:
-            case PC_BISHOP:
-            case PC_ROOK:
-            case PC_QUEEN:
-                remove_piece(m.to());
-                put_piece(make_piece(C, PAWN), m.from());
-                put_piece(history[game_ply].captured, m.to());
-                break;
-            case CAPTURE:
-                move_piece_quiet(m.to(), m.from());
-                put_piece(history[game_ply].captured, m.to());
-                break;
-        }
+    MoveFlags type = m.flags();
+    switch (type) {
+        case QUIET:
+            move_piece_quiet(m.to(), m.from());
+            break;
+        case DOUBLE_PUSH:
+            move_piece_quiet(m.to(), m.from());
+            break;
+        case OO:
+            if (C == WHITE) {
+                move_piece_quiet(g1, e1);
+                move_piece_quiet(f1, h1);
+            } else {
+                move_piece_quiet(g8, e8);
+                move_piece_quiet(f8, h8);
+            }
+            break;
+        case OOO:
+            if (C == WHITE) {
+                move_piece_quiet(c1, e1);
+                move_piece_quiet(d1, a1);
+            } else {
+                move_piece_quiet(c8, e8);
+                move_piece_quiet(d8, a8);
+            }
+            break;
+        case EN_PASSANT:
+            move_piece_quiet(m.to(), m.from());
+            put_piece(make_piece(~C, PAWN), m.to() + relative_dir<C>(SOUTH));
+            break;
+        case PR_KNIGHT:
+        case PR_BISHOP:
+        case PR_ROOK:
+        case PR_QUEEN:
+            remove_piece(m.to());
+            put_piece(make_piece(C, PAWN), m.from());
+            break;
+        case PC_KNIGHT:
+        case PC_BISHOP:
+        case PC_ROOK:
+        case PC_QUEEN:
+            remove_piece(m.to());
+            put_piece(make_piece(C, PAWN), m.from());
+            put_piece(history[game_ply].captured, m.to());
+            break;
+        case CAPTURE:
+            move_piece_quiet(m.to(), m.from());
+            put_piece(history[game_ply].captured, m.to());
+            break;
     }
 
     side_to_play = ~side_to_play;
