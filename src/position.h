@@ -73,14 +73,14 @@ private:
     // The side whose turn it is to play next
     Color side_to_play;
 
-    // The current game ply (depth), incremented after each move
-    int game_ply;
-
     // The zobrist hash of the position, which can be incrementally updated and rolled back after each
     // make/unmake
     uint64_t hash;
 
 public:
+    // The current game ply (depth), incremented after each move
+    int game_ply;
+
     // The history of non-recoverable information
     UndoInfo history[256];
 
@@ -99,8 +99,8 @@ public:
         piece_bb {0},
         board {},
         side_to_play(WHITE),
-        game_ply(0),
         hash(0),
+        game_ply(0),
         checkers(0),
         pinned(0) {
         // Sets all squares on the board as empty
