@@ -200,10 +200,6 @@ public:
     template <Color C>
     void undo(Move m);
 
-    bool is_last_move_null() const {
-        return history[game_ply].entry == 0;
-    }
-
     template <Color Us>
     Move* generate_legals(Move* list);
 };
