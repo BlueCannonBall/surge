@@ -83,7 +83,7 @@ public:
     int game_ply;
 
     // The history of non-recoverable information
-    UndoInfo history[256];
+    UndoInfo history[2048];
 
     // The bitboard of enemy pieces that are currently attacking the king, updated whenever generate_moves()
     // is called
