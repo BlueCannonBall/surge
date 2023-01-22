@@ -34,6 +34,7 @@ public:
 
 namespace zobrist {
     extern uint64_t zobrist_table[NPIECES][NSQUARES];
+    extern uint64_t turn_hash;
     extern void initialise_zobrist_keys();
 } // namespace zobrist
 
@@ -93,8 +94,8 @@ public:
     Bitboard pinned;
 
     // gk adapted order of initialization
-    // gk	Position() : piece_bb{ 0 }, side_to_play(WHITE), game_ply(0), board{},
-    // gk		hash(0), pinned(0), checkers(0) {
+    // gk   Position() : piece_bb{ 0 }, side_to_play(WHITE), game_ply(0), board{},
+    // gk       hash(0), pinned(0), checkers(0) {
     Position() :
         piece_bb {0},
         board {},
@@ -130,6 +131,9 @@ public:
 
         ss >> token;
         side_to_play = token == 'w' ? WHITE : BLACK;
+        if (side_to_play == BLACK) {
+            hash ^= zobrist::turn_hash;
+        }
 
         history[game_ply].entry = ALL_CASTLING_MASK;
         while (ss >> token && !isspace(token)) {
@@ -273,6 +277,7 @@ template <Color C>
 void Position::play(const Move m) {
     side_to_play = ~side_to_play;
     ++game_ply;
+    hash ^= zobrist::turn_hash;
     history[game_ply] = UndoInfo(history[game_ply - 1]);
 
     MoveFlags type = m.flags();
@@ -420,6 +425,7 @@ void Position::undo(const Move m) {
 
     side_to_play = ~side_to_play;
     --game_ply;
+    hash ^= zobrist::turn_hash;
 }
 
 // Generates all legal moves in a position for the given side. Advances the move pointer and returns it.
