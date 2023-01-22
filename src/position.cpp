@@ -11,11 +11,8 @@ uint64_t zobrist::turn_hash; // Added to indicate side to move
 void zobrist::initialise_zobrist_keys() {
     PRNG rng(70026072);
     zobrist::turn_hash = rng.rand<uint64_t>();
-    // gk comparison of integer expressions of different signedness
-    // gk for (int i = 0; i < NPIECES; i++)
-    // gk    for (int j = 0; j < NSQUARES; j++)
-    for (size_t i = 0; i < NPIECES; i++)
-        for (size_t j = 0; j < NSQUARES; j++)
+    for (int i = 0; i < NPIECES; i++)
+        for (int j = 0; j < NSQUARES; j++)
             zobrist::zobrist_table[i][j] = rng.rand<uint64_t>();
 }
 
