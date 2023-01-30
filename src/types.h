@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-const int NCOLORS = 2;
+constexpr int NCOLORS = 2;
 enum Color : int {
     WHITE,
     BLACK
@@ -24,7 +24,7 @@ constexpr Color operator~(Color c) {
     return Color(c ^ BLACK);
 }
 
-const int NDIRS = 8;
+constexpr int NDIRS = 8;
 enum Direction : int {
     NORTH = 8,
     NORTH_EAST = 9,
@@ -38,7 +38,7 @@ enum Direction : int {
     SOUTH_SOUTH = -16
 };
 
-const int NPIECE_TYPES = 6;
+constexpr int NPIECE_TYPES = 6;
 enum PieceType : int {
     PAWN,
     KNIGHT,
@@ -64,7 +64,7 @@ const std::string DEFAULT_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w K
 // The Kiwipete position, used for perft debugging
 const std::string KIWIPETE = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq -";
 
-const int NPIECES = 15;
+constexpr int NPIECES = 15;
 enum Piece : int {
     WHITE_PAWN,
     WHITE_KNIGHT,
@@ -102,7 +102,7 @@ constexpr Color color_of(Piece pc) {
 
 typedef uint64_t Bitboard;
 
-const int NSQUARES = 64;
+constexpr int NSQUARES = 64;
 enum Square : int {
     a1,
     b1,

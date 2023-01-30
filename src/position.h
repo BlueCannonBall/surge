@@ -7,6 +7,8 @@
 #include <string>
 #include <utility>
 
+constexpr int NHISTORY = 2048;
+
 // A psuedorandom number generator
 // Source: Stockfish
 class PRNG {
@@ -83,7 +85,7 @@ public:
     int game_ply;
 
     // The history of non-recoverable information
-    UndoInfo history[2048];
+    UndoInfo history[NHISTORY];
 
     // The bitboard of enemy pieces that are currently attacking the king, updated whenever generate_moves()
     // is called
