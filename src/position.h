@@ -35,8 +35,8 @@ public:
 };
 
 namespace zobrist {
-    extern uint64_t zobrist_table[NPIECES][NSQUARES];
-    extern uint64_t turn_hash;
+    extern uint64_t table[NPIECES][NSQUARES];
+    extern uint64_t turn;
     extern void initialise_zobrist_keys();
 } // namespace zobrist
 
@@ -134,7 +134,7 @@ public:
         ss >> token;
         side_to_play = token == 'w' ? WHITE : BLACK;
         if (side_to_play == BLACK) {
-            hash ^= zobrist::turn_hash;
+            hash ^= zobrist::turn;
         }
 
         history[game_ply].entry = ALL_CASTLING_MASK;
@@ -161,12 +161,12 @@ public:
     inline void put_piece(Piece pc, Square s) {
         board[s] = pc;
         piece_bb[pc] |= SQUARE_BB[s];
-        hash ^= zobrist::zobrist_table[pc][s];
+        hash ^= zobrist::table[pc][s];
     }
 
     // Removes a piece from a particular square and updates the hash.
     inline void remove_piece(Square s) {
-        hash ^= zobrist::zobrist_table[board[s]][s];
+        hash ^= zobrist::table[board[s]][s];
         piece_bb[board[s]] &= ~SQUARE_BB[s];
         board[s] = NO_PIECE;
     }
@@ -285,7 +285,7 @@ void Position::play(const Move m) {
 
     if (!m.is_null()) {
         side_to_play = ~side_to_play;
-        hash ^= zobrist::turn_hash;
+        hash ^= zobrist::turn;
         switch (type) {
             case QUIET:
                 // The to square is guaranteed to be empty here
@@ -428,7 +428,7 @@ void Position::undo(const Move m) {
                 break;
         }
         side_to_play = ~side_to_play;
-        hash ^= zobrist::turn_hash;
+        hash ^= zobrist::turn;
     }
 
     --game_ply;
