@@ -190,6 +190,7 @@ inline Square& operator-=(Square& s, Direction d) {
     return s = s - d;
 }
 
+constexpr int NFILES = 8;
 enum File : int {
     AFILE,
     BFILE,
@@ -220,6 +221,7 @@ inline File& operator-=(File& a, File b) {
     return a = a - b;
 }
 
+constexpr int NRANKS = 8;
 enum Rank : int {
     RANK1,
     RANK2,
