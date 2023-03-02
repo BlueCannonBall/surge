@@ -20,8 +20,8 @@ class PRNG {
     }
 
 public:
-    PRNG(uint64_t seed) :
-        s(seed) { }
+    PRNG(uint64_t seed):
+        s(seed) {}
 
     // Generate psuedorandom number
     template <typename T>
@@ -53,16 +53,16 @@ struct UndoInfo {
     // double pushed on the previous move
     Square epsq;
 
-    constexpr UndoInfo() :
+    constexpr UndoInfo():
         entry(0),
         captured(NO_PIECE),
-        epsq(NO_SQUARE) { }
+        epsq(NO_SQUARE) {}
 
     // This preserves the entry bitboard across moves
-    UndoInfo(const UndoInfo& prev) :
+    UndoInfo(const UndoInfo& prev):
         entry(prev.entry),
         captured(NO_PIECE),
-        epsq(NO_SQUARE) { }
+        epsq(NO_SQUARE) {}
 };
 
 class Position {
@@ -98,7 +98,7 @@ public:
     // gk adapted order of initialization
     // gk   Position() : piece_bb{ 0 }, side_to_play(WHITE), game_ply(0), board{},
     // gk       hash(0), pinned(0), checkers(0) {
-    Position() :
+    Position():
         piece_bb {0},
         board {},
         side_to_play(WHITE),
@@ -111,7 +111,7 @@ public:
         history[0] = UndoInfo();
     }
 
-    Position(const std::string& fen) :
+    Position(const std::string& fen):
         Position() {
         // Sets all squares on the board as empty
         for (int i = 0; i < 64; i++) board[i] = NO_PIECE;
@@ -757,8 +757,8 @@ Move* Position::generate_legals(Move* list) {
 template <Color Us>
 class MoveList {
 public:
-    explicit MoveList(Position& p) :
-        last(p.generate_legals<Us>(list)) { }
+    explicit MoveList(Position& p):
+        last(p.generate_legals<Us>(list)) {}
 
     const Move* begin() const { return list; }
     const Move* end() const { return last; }

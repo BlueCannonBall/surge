@@ -348,17 +348,17 @@ private:
 
 public:
     // Defaults to a null move (a1a1)
-    inline Move() :
-        move(0) { }
+    inline Move():
+        move(0) {}
 
     inline Move(uint16_t m) { move = m; }
 
-    inline Move(Square from, Square to) :
+    inline Move(Square from, Square to):
         move(0) {
         move = (from << 6) | to;
     }
 
-    inline Move(Square from, Square to, MoveFlags flags) :
+    inline Move(Square from, Square to, MoveFlags flags):
         move(0) {
         move = (flags << 12) | (from << 6) | to;
     }
