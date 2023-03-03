@@ -522,40 +522,39 @@ Move* Position::generate_legals(Move* list) {
     case 2:
         // If there is a double check, the only legal moves are king moves out of check
         return list;
-    case 1:
-        {
-            // It's a single check!
+    case 1: {
+        // It's a single check!
 
-            Square checker_square = bsf(checkers);
+        Square checker_square = bsf(checkers);
 
-            switch (board[checker_square]) {
-            case make_piece(Them, PAWN):
-                // If the checker is a pawn, we must check for e.p. moves that can capture it
-                // This evaluates to true if the checking piece is the one which just double pushed
-                if (checkers == shift<relative_dir<Us>(SOUTH)>(SQUARE_BB[history[game_ply].epsq])) {
-                    // b1 contains our pawns that can capture the checker e.p.
-                    b1 = pawn_attacks<Them>(history[game_ply].epsq) & bitboard_of(Us, PAWN) & not_pinned;
-                    while (b1) *list++ = Move(pop_lsb(&b1), history[game_ply].epsq, EN_PASSANT);
-                }
-                // FALL THROUGH INTENTIONAL
-            case make_piece(Them, KNIGHT):
-                // If the checker is either a pawn or a knight, the only legal moves are to capture
-                // the checker. Only non-pinned pieces can capture it
-                b1 = attackers_from<Us>(checker_square, all) & not_pinned;
-                while (b1) *list++ = Move(pop_lsb(&b1), checker_square, CAPTURE);
-
-                return list;
-            default:
-                // We must capture the checking piece
-                capture_mask = checkers;
-
-                //...or we can block it since it is guaranteed to be a slider
-                quiet_mask = SQUARES_BETWEEN_BB[our_king][checker_square];
-                break;
+        switch (board[checker_square]) {
+        case make_piece(Them, PAWN):
+            // If the checker is a pawn, we must check for e.p. moves that can capture it
+            // This evaluates to true if the checking piece is the one which just double pushed
+            if (checkers == shift<relative_dir<Us>(SOUTH)>(SQUARE_BB[history[game_ply].epsq])) {
+                // b1 contains our pawns that can capture the checker e.p.
+                b1 = pawn_attacks<Them>(history[game_ply].epsq) & bitboard_of(Us, PAWN) & not_pinned;
+                while (b1) *list++ = Move(pop_lsb(&b1), history[game_ply].epsq, EN_PASSANT);
             }
+            // FALL THROUGH INTENTIONAL
+        case make_piece(Them, KNIGHT):
+            // If the checker is either a pawn or a knight, the only legal moves are to capture
+            // the checker. Only non-pinned pieces can capture it
+            b1 = attackers_from<Us>(checker_square, all) & not_pinned;
+            while (b1) *list++ = Move(pop_lsb(&b1), checker_square, CAPTURE);
 
+            return list;
+        default:
+            // We must capture the checking piece
+            capture_mask = checkers;
+
+            //...or we can block it since it is guaranteed to be a slider
+            quiet_mask = SQUARES_BETWEEN_BB[our_king][checker_square];
             break;
         }
+
+        break;
+    }
 
     default:
         // We can capture any enemy piece
