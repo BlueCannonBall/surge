@@ -350,17 +350,17 @@ private:
 
 public:
     // Defaults to a null move (a1a1)
-    inline Move() :
-        move(0) { }
+    inline Move():
+        move(0) {}
 
     inline Move(uint16_t m) { move = m; }
 
-    inline Move(Square from, Square to) :
+    inline Move(Square from, Square to):
         move(0) {
         move = (from << 6) | to;
     }
 
-    inline Move(Square from, Square to, MoveFlags flags) :
+    inline Move(Square from, Square to, MoveFlags flags):
         move(0) {
         move = (flags << 12) | (from << 6) | to;
     }
@@ -393,24 +393,24 @@ public:
 
     PieceType promotion() const {
         switch (flags()) {
-            case PR_KNIGHT:
-            case PC_KNIGHT:
-                return KNIGHT;
+        case PR_KNIGHT:
+        case PC_KNIGHT:
+            return KNIGHT;
 
-            case PR_BISHOP:
-            case PC_BISHOP:
-                return BISHOP;
+        case PR_BISHOP:
+        case PC_BISHOP:
+            return BISHOP;
 
-            case PR_ROOK:
-            case PC_ROOK:
-                return ROOK;
+        case PR_ROOK:
+        case PC_ROOK:
+            return ROOK;
 
-            case PR_QUEEN:
-            case PC_QUEEN:
-                return QUEEN;
+        case PR_QUEEN:
+        case PC_QUEEN:
+            return QUEEN;
 
-            default:
-                throw std::logic_error("Not a promotion");
+        default:
+            throw std::logic_error("Not a promotion");
         }
     }
 

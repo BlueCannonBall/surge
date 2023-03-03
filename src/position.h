@@ -20,8 +20,8 @@ class PRNG {
     }
 
 public:
-    PRNG(uint64_t seed) :
-        s(seed) { }
+    PRNG(uint64_t seed):
+        s(seed) {}
 
     // Generate psuedorandom number
     template <typename T>
@@ -53,16 +53,16 @@ struct UndoInfo {
     // double pushed on the previous move
     Square epsq;
 
-    constexpr UndoInfo() :
+    constexpr UndoInfo():
         entry(0),
         captured(NO_PIECE),
-        epsq(NO_SQUARE) { }
+        epsq(NO_SQUARE) {}
 
     // This preserves the entry bitboard across moves
-    UndoInfo(const UndoInfo& prev) :
+    UndoInfo(const UndoInfo& prev):
         entry(prev.entry),
         captured(NO_PIECE),
-        epsq(NO_SQUARE) { }
+        epsq(NO_SQUARE) {}
 };
 
 class Position {
@@ -98,7 +98,7 @@ public:
     // gk adapted order of initialization
     // gk   Position() : piece_bb{ 0 }, side_to_play(WHITE), game_ply(0), board{},
     // gk       hash(0), pinned(0), checkers(0) {
-    Position() :
+    Position():
         piece_bb {0},
         board {},
         side_to_play(WHITE),
@@ -111,7 +111,7 @@ public:
         history[0] = UndoInfo();
     }
 
-    Position(const std::string& fen) :
+    Position(const std::string& fen):
         Position() {
         // Sets all squares on the board as empty
         for (int i = 0; i < 64; i++) board[i] = NO_PIECE;
@@ -140,18 +140,18 @@ public:
         history[game_ply].entry = ALL_CASTLING_MASK;
         while (ss >> token && !isspace(token)) {
             switch (token) {
-                case 'K':
-                    history[game_ply].entry &= ~WHITE_OO_MASK;
-                    break;
-                case 'Q':
-                    history[game_ply].entry &= ~WHITE_OOO_MASK;
-                    break;
-                case 'k':
-                    history[game_ply].entry &= ~BLACK_OO_MASK;
-                    break;
-                case 'q':
-                    history[game_ply].entry &= ~BLACK_OOO_MASK;
-                    break;
+            case 'K':
+                history[game_ply].entry &= ~WHITE_OO_MASK;
+                break;
+            case 'Q':
+                history[game_ply].entry &= ~WHITE_OOO_MASK;
+                break;
+            case 'k':
+                history[game_ply].entry &= ~BLACK_OO_MASK;
+                break;
+            case 'q':
+                history[game_ply].entry &= ~BLACK_OOO_MASK;
+                break;
             }
         }
     }
@@ -287,88 +287,88 @@ void Position::play(const Move m) {
         side_to_play = ~side_to_play;
         hash ^= zobrist::turn;
         switch (type) {
-            case QUIET:
-                // The to square is guaranteed to be empty here
-                move_piece_quiet(m.from(), m.to());
-                break;
-            case DOUBLE_PUSH:
-                // The to square is guaranteed to be empty here
-                move_piece_quiet(m.from(), m.to());
+        case QUIET:
+            // The to square is guaranteed to be empty here
+            move_piece_quiet(m.from(), m.to());
+            break;
+        case DOUBLE_PUSH:
+            // The to square is guaranteed to be empty here
+            move_piece_quiet(m.from(), m.to());
 
-                // This is the square behind the pawn that was double-pushed
-                history[game_ply].epsq = m.from() + relative_dir<C>(NORTH);
-                break;
-            case OO:
-                if (C == WHITE) {
-                    move_piece_quiet(e1, g1);
-                    move_piece_quiet(h1, f1);
-                } else {
-                    move_piece_quiet(e8, g8);
-                    move_piece_quiet(h8, f8);
-                }
-                break;
-            case OOO:
-                if (C == WHITE) {
-                    move_piece_quiet(e1, c1);
-                    move_piece_quiet(a1, d1);
-                } else {
-                    move_piece_quiet(e8, c8);
-                    move_piece_quiet(a8, d8);
-                }
-                break;
-            case EN_PASSANT:
-                move_piece_quiet(m.from(), m.to());
-                remove_piece(m.to() + relative_dir<C>(SOUTH));
-                break;
-            case PR_KNIGHT:
-                remove_piece(m.from());
-                put_piece(make_piece(C, KNIGHT), m.to());
-                break;
-            case PR_BISHOP:
-                remove_piece(m.from());
-                put_piece(make_piece(C, BISHOP), m.to());
-                break;
-            case PR_ROOK:
-                remove_piece(m.from());
-                put_piece(make_piece(C, ROOK), m.to());
-                break;
-            case PR_QUEEN:
-                remove_piece(m.from());
-                put_piece(make_piece(C, QUEEN), m.to());
-                break;
-            case PC_KNIGHT:
-                remove_piece(m.from());
-                history[game_ply].captured = board[m.to()];
-                remove_piece(m.to());
+            // This is the square behind the pawn that was double-pushed
+            history[game_ply].epsq = m.from() + relative_dir<C>(NORTH);
+            break;
+        case OO:
+            if (C == WHITE) {
+                move_piece_quiet(e1, g1);
+                move_piece_quiet(h1, f1);
+            } else {
+                move_piece_quiet(e8, g8);
+                move_piece_quiet(h8, f8);
+            }
+            break;
+        case OOO:
+            if (C == WHITE) {
+                move_piece_quiet(e1, c1);
+                move_piece_quiet(a1, d1);
+            } else {
+                move_piece_quiet(e8, c8);
+                move_piece_quiet(a8, d8);
+            }
+            break;
+        case EN_PASSANT:
+            move_piece_quiet(m.from(), m.to());
+            remove_piece(m.to() + relative_dir<C>(SOUTH));
+            break;
+        case PR_KNIGHT:
+            remove_piece(m.from());
+            put_piece(make_piece(C, KNIGHT), m.to());
+            break;
+        case PR_BISHOP:
+            remove_piece(m.from());
+            put_piece(make_piece(C, BISHOP), m.to());
+            break;
+        case PR_ROOK:
+            remove_piece(m.from());
+            put_piece(make_piece(C, ROOK), m.to());
+            break;
+        case PR_QUEEN:
+            remove_piece(m.from());
+            put_piece(make_piece(C, QUEEN), m.to());
+            break;
+        case PC_KNIGHT:
+            remove_piece(m.from());
+            history[game_ply].captured = board[m.to()];
+            remove_piece(m.to());
 
-                put_piece(make_piece(C, KNIGHT), m.to());
-                break;
-            case PC_BISHOP:
-                remove_piece(m.from());
-                history[game_ply].captured = board[m.to()];
-                remove_piece(m.to());
+            put_piece(make_piece(C, KNIGHT), m.to());
+            break;
+        case PC_BISHOP:
+            remove_piece(m.from());
+            history[game_ply].captured = board[m.to()];
+            remove_piece(m.to());
 
-                put_piece(make_piece(C, BISHOP), m.to());
-                break;
-            case PC_ROOK:
-                remove_piece(m.from());
-                history[game_ply].captured = board[m.to()];
-                remove_piece(m.to());
+            put_piece(make_piece(C, BISHOP), m.to());
+            break;
+        case PC_ROOK:
+            remove_piece(m.from());
+            history[game_ply].captured = board[m.to()];
+            remove_piece(m.to());
 
-                put_piece(make_piece(C, ROOK), m.to());
-                break;
-            case PC_QUEEN:
-                remove_piece(m.from());
-                history[game_ply].captured = board[m.to()];
-                remove_piece(m.to());
+            put_piece(make_piece(C, ROOK), m.to());
+            break;
+        case PC_QUEEN:
+            remove_piece(m.from());
+            history[game_ply].captured = board[m.to()];
+            remove_piece(m.to());
 
-                put_piece(make_piece(C, QUEEN), m.to());
-                break;
-            case CAPTURE:
-                history[game_ply].captured = board[m.to()];
-                move_piece(m.from(), m.to());
+            put_piece(make_piece(C, QUEEN), m.to());
+            break;
+        case CAPTURE:
+            history[game_ply].captured = board[m.to()];
+            move_piece(m.from(), m.to());
 
-                break;
+            break;
         }
     }
 }
@@ -379,53 +379,53 @@ void Position::undo(const Move m) {
     MoveFlags type = m.flags();
     if (!m.is_null()) {
         switch (type) {
-            case QUIET:
-                move_piece_quiet(m.to(), m.from());
-                break;
-            case DOUBLE_PUSH:
-                move_piece_quiet(m.to(), m.from());
-                break;
-            case OO:
-                if (C == WHITE) {
-                    move_piece_quiet(g1, e1);
-                    move_piece_quiet(f1, h1);
-                } else {
-                    move_piece_quiet(g8, e8);
-                    move_piece_quiet(f8, h8);
-                }
-                break;
-            case OOO:
-                if (C == WHITE) {
-                    move_piece_quiet(c1, e1);
-                    move_piece_quiet(d1, a1);
-                } else {
-                    move_piece_quiet(c8, e8);
-                    move_piece_quiet(d8, a8);
-                }
-                break;
-            case EN_PASSANT:
-                move_piece_quiet(m.to(), m.from());
-                put_piece(make_piece(~C, PAWN), m.to() + relative_dir<C>(SOUTH));
-                break;
-            case PR_KNIGHT:
-            case PR_BISHOP:
-            case PR_ROOK:
-            case PR_QUEEN:
-                remove_piece(m.to());
-                put_piece(make_piece(C, PAWN), m.from());
-                break;
-            case PC_KNIGHT:
-            case PC_BISHOP:
-            case PC_ROOK:
-            case PC_QUEEN:
-                remove_piece(m.to());
-                put_piece(make_piece(C, PAWN), m.from());
-                put_piece(history[game_ply].captured, m.to());
-                break;
-            case CAPTURE:
-                move_piece_quiet(m.to(), m.from());
-                put_piece(history[game_ply].captured, m.to());
-                break;
+        case QUIET:
+            move_piece_quiet(m.to(), m.from());
+            break;
+        case DOUBLE_PUSH:
+            move_piece_quiet(m.to(), m.from());
+            break;
+        case OO:
+            if (C == WHITE) {
+                move_piece_quiet(g1, e1);
+                move_piece_quiet(f1, h1);
+            } else {
+                move_piece_quiet(g8, e8);
+                move_piece_quiet(f8, h8);
+            }
+            break;
+        case OOO:
+            if (C == WHITE) {
+                move_piece_quiet(c1, e1);
+                move_piece_quiet(d1, a1);
+            } else {
+                move_piece_quiet(c8, e8);
+                move_piece_quiet(d8, a8);
+            }
+            break;
+        case EN_PASSANT:
+            move_piece_quiet(m.to(), m.from());
+            put_piece(make_piece(~C, PAWN), m.to() + relative_dir<C>(SOUTH));
+            break;
+        case PR_KNIGHT:
+        case PR_BISHOP:
+        case PR_ROOK:
+        case PR_QUEEN:
+            remove_piece(m.to());
+            put_piece(make_piece(C, PAWN), m.from());
+            break;
+        case PC_KNIGHT:
+        case PC_BISHOP:
+        case PC_ROOK:
+        case PC_QUEEN:
+            remove_piece(m.to());
+            put_piece(make_piece(C, PAWN), m.from());
+            put_piece(history[game_ply].captured, m.to());
+            break;
+        case CAPTURE:
+            move_piece_quiet(m.to(), m.from());
+            put_piece(history[game_ply].captured, m.to());
+            break;
         }
         side_to_play = ~side_to_play;
         hash ^= zobrist::turn;
@@ -519,137 +519,138 @@ Move* Position::generate_legals(Move* list) {
     const Bitboard not_pinned = ~pinned;
 
     switch (sparse_pop_count(checkers)) {
-        case 2:
-            // If there is a double check, the only legal moves are king moves out of check
-            return list;
-        case 1: {
+    case 2:
+        // If there is a double check, the only legal moves are king moves out of check
+        return list;
+    case 1:
+        {
             // It's a single check!
 
             Square checker_square = bsf(checkers);
 
             switch (board[checker_square]) {
-                case make_piece(Them, PAWN):
-                    // If the checker is a pawn, we must check for e.p. moves that can capture it
-                    // This evaluates to true if the checking piece is the one which just double pushed
-                    if (checkers == shift<relative_dir<Us>(SOUTH)>(SQUARE_BB[history[game_ply].epsq])) {
-                        // b1 contains our pawns that can capture the checker e.p.
-                        b1 = pawn_attacks<Them>(history[game_ply].epsq) & bitboard_of(Us, PAWN) & not_pinned;
-                        while (b1) *list++ = Move(pop_lsb(&b1), history[game_ply].epsq, EN_PASSANT);
-                    }
-                    // FALL THROUGH INTENTIONAL
-                case make_piece(Them, KNIGHT):
-                    // If the checker is either a pawn or a knight, the only legal moves are to capture
-                    // the checker. Only non-pinned pieces can capture it
-                    b1 = attackers_from<Us>(checker_square, all) & not_pinned;
-                    while (b1) *list++ = Move(pop_lsb(&b1), checker_square, CAPTURE);
+            case make_piece(Them, PAWN):
+                // If the checker is a pawn, we must check for e.p. moves that can capture it
+                // This evaluates to true if the checking piece is the one which just double pushed
+                if (checkers == shift<relative_dir<Us>(SOUTH)>(SQUARE_BB[history[game_ply].epsq])) {
+                    // b1 contains our pawns that can capture the checker e.p.
+                    b1 = pawn_attacks<Them>(history[game_ply].epsq) & bitboard_of(Us, PAWN) & not_pinned;
+                    while (b1) *list++ = Move(pop_lsb(&b1), history[game_ply].epsq, EN_PASSANT);
+                }
+                // FALL THROUGH INTENTIONAL
+            case make_piece(Them, KNIGHT):
+                // If the checker is either a pawn or a knight, the only legal moves are to capture
+                // the checker. Only non-pinned pieces can capture it
+                b1 = attackers_from<Us>(checker_square, all) & not_pinned;
+                while (b1) *list++ = Move(pop_lsb(&b1), checker_square, CAPTURE);
 
-                    return list;
-                default:
-                    // We must capture the checking piece
-                    capture_mask = checkers;
+                return list;
+            default:
+                // We must capture the checking piece
+                capture_mask = checkers;
 
-                    //...or we can block it since it is guaranteed to be a slider
-                    quiet_mask = SQUARES_BETWEEN_BB[our_king][checker_square];
-                    break;
+                //...or we can block it since it is guaranteed to be a slider
+                quiet_mask = SQUARES_BETWEEN_BB[our_king][checker_square];
+                break;
             }
 
             break;
         }
 
-        default:
-            // We can capture any enemy piece
-            capture_mask = them_bb;
+    default:
+        // We can capture any enemy piece
+        capture_mask = them_bb;
 
-            //...and we can play a quiet move to any square which is not occupied
-            quiet_mask = ~all;
+        //...and we can play a quiet move to any square which is not occupied
+        quiet_mask = ~all;
 
-            if (history[game_ply].epsq != NO_SQUARE) {
-                // b1 contains our pawns that can perform an e.p. capture
-                b2 = pawn_attacks<Them>(history[game_ply].epsq) & bitboard_of(Us, PAWN);
-                b1 = b2 & not_pinned;
-                while (b1) {
-                    s = pop_lsb(&b1);
-
-                    // This piece of evil bit-fiddling magic prevents the infamous 'pseudo-pinned' e.p. case,
-                    // where the pawn is not directly pinned, but on moving the pawn and capturing the enemy pawn
-                    // e.p., a rook or queen attack to the king is revealed
-
-                    /*
-                    .nbqkbnr
-                    ppp.pppp
-                    ........
-                    r..pP..K
-                    ........
-                    ........
-                    PPPP.PPP
-                    RNBQ.BNR
-
-                    Here, if white plays exd5 e.p., the black rook on a5 attacks the white king on h5
-                    */
-
-                    if ((sliding_attacks(our_king, all ^ SQUARE_BB[s] ^ shift<relative_dir<Us>(SOUTH)>(SQUARE_BB[history[game_ply].epsq]), MASK_RANK[rank_of(our_king)]) &
-                            their_orth_sliders) == 0)
-                        *list++ = Move(s, history[game_ply].epsq, EN_PASSANT);
-                }
-
-                // Pinned pawns can only capture e.p. if they are pinned diagonally and the e.p. square is in line with the king
-                b1 = b2 & pinned & LINE[history[game_ply].epsq][our_king];
-                if (b1) {
-                    *list++ = Move(bsf(b1), history[game_ply].epsq, EN_PASSANT);
-                }
-            }
-
-            // Only add castling if:
-            // 1. The king and the rook have both not moved
-            // 2. No piece is attacking between the the rook and the king
-            // 3. The king is not in check
-            if (!((history[game_ply].entry & oo_mask<Us>()) | ((all | danger) & oo_blockers_mask<Us>())))
-                *list++ = Us == WHITE ? Move(e1, h1, OO) : Move(e8, h8, OO);
-            if (!((history[game_ply].entry & ooo_mask<Us>()) |
-                    ((all | (danger & ~ignore_ooo_danger<Us>())) & ooo_blockers_mask<Us>())))
-                *list++ = Us == WHITE ? Move(e1, c1, OOO) : Move(e8, c8, OOO);
-
-            // For each pinned rook, bishop or queen...
-            b1 = ~(not_pinned | bitboard_of(Us, KNIGHT));
+        if (history[game_ply].epsq != NO_SQUARE) {
+            // b1 contains our pawns that can perform an e.p. capture
+            b2 = pawn_attacks<Them>(history[game_ply].epsq) & bitboard_of(Us, PAWN);
+            b1 = b2 & not_pinned;
             while (b1) {
                 s = pop_lsb(&b1);
 
-                //...only include attacks that are aligned with our king, since pinned pieces
-                // are constrained to move in this direction only
-                b2 = attacks(type_of(board[s]), s, all) & LINE[our_king][s];
-                list = make<QUIET>(s, b2 & quiet_mask, list);
-                list = make<CAPTURE>(s, b2 & capture_mask, list);
+                // This piece of evil bit-fiddling magic prevents the infamous 'pseudo-pinned' e.p. case,
+                // where the pawn is not directly pinned, but on moving the pawn and capturing the enemy pawn
+                // e.p., a rook or queen attack to the king is revealed
+
+                /*
+                .nbqkbnr
+                ppp.pppp
+                ........
+                r..pP..K
+                ........
+                ........
+                PPPP.PPP
+                RNBQ.BNR
+
+                Here, if white plays exd5 e.p., the black rook on a5 attacks the white king on h5
+                */
+
+                if ((sliding_attacks(our_king, all ^ SQUARE_BB[s] ^ shift<relative_dir<Us>(SOUTH)>(SQUARE_BB[history[game_ply].epsq]), MASK_RANK[rank_of(our_king)]) &
+                        their_orth_sliders) == 0)
+                    *list++ = Move(s, history[game_ply].epsq, EN_PASSANT);
             }
 
-            // For each pinned pawn...
-            b1 = ~not_pinned & bitboard_of(Us, PAWN);
-            while (b1) {
-                s = pop_lsb(&b1);
-
-                if (rank_of(s) == relative_rank<Us>(RANK7)) {
-                    // Quiet promotions are impossible since the square in front of the pawn will
-                    // either be occupied by the king or the pinner, or doing so would leave our king
-                    // in check
-                    b2 = pawn_attacks<Us>(s) & capture_mask & LINE[our_king][s];
-                    list = make<PROMOTION_CAPTURES>(s, b2, list);
-                } else {
-                    b2 = pawn_attacks<Us>(s) & them_bb & LINE[s][our_king];
-                    list = make<CAPTURE>(s, b2, list);
-
-                    // Single pawn pushes
-                    b2 = shift<relative_dir<Us>(NORTH)>(SQUARE_BB[s]) & ~all & LINE[our_king][s];
-                    // Double pawn pushes (only pawns on rank 3/6 are eligible)
-                    b3 = shift<relative_dir<Us>(NORTH)>(b2 &
-                                                        MASK_RANK[relative_rank<Us>(RANK3)]) &
-                         ~all & LINE[our_king][s];
-                    list = make<QUIET>(s, b2, list);
-                    list = make<DOUBLE_PUSH>(s, b3, list);
-                }
+            // Pinned pawns can only capture e.p. if they are pinned diagonally and the e.p. square is in line with the king
+            b1 = b2 & pinned & LINE[history[game_ply].epsq][our_king];
+            if (b1) {
+                *list++ = Move(bsf(b1), history[game_ply].epsq, EN_PASSANT);
             }
+        }
 
-            // Pinned knights cannot move anywhere, so we're done with pinned pieces!
+        // Only add castling if:
+        // 1. The king and the rook have both not moved
+        // 2. No piece is attacking between the the rook and the king
+        // 3. The king is not in check
+        if (!((history[game_ply].entry & oo_mask<Us>()) | ((all | danger) & oo_blockers_mask<Us>())))
+            *list++ = Us == WHITE ? Move(e1, h1, OO) : Move(e8, h8, OO);
+        if (!((history[game_ply].entry & ooo_mask<Us>()) |
+                ((all | (danger & ~ignore_ooo_danger<Us>())) & ooo_blockers_mask<Us>())))
+            *list++ = Us == WHITE ? Move(e1, c1, OOO) : Move(e8, c8, OOO);
 
-            break;
+        // For each pinned rook, bishop or queen...
+        b1 = ~(not_pinned | bitboard_of(Us, KNIGHT));
+        while (b1) {
+            s = pop_lsb(&b1);
+
+            //...only include attacks that are aligned with our king, since pinned pieces
+            // are constrained to move in this direction only
+            b2 = attacks(type_of(board[s]), s, all) & LINE[our_king][s];
+            list = make<QUIET>(s, b2 & quiet_mask, list);
+            list = make<CAPTURE>(s, b2 & capture_mask, list);
+        }
+
+        // For each pinned pawn...
+        b1 = ~not_pinned & bitboard_of(Us, PAWN);
+        while (b1) {
+            s = pop_lsb(&b1);
+
+            if (rank_of(s) == relative_rank<Us>(RANK7)) {
+                // Quiet promotions are impossible since the square in front of the pawn will
+                // either be occupied by the king or the pinner, or doing so would leave our king
+                // in check
+                b2 = pawn_attacks<Us>(s) & capture_mask & LINE[our_king][s];
+                list = make<PROMOTION_CAPTURES>(s, b2, list);
+            } else {
+                b2 = pawn_attacks<Us>(s) & them_bb & LINE[s][our_king];
+                list = make<CAPTURE>(s, b2, list);
+
+                // Single pawn pushes
+                b2 = shift<relative_dir<Us>(NORTH)>(SQUARE_BB[s]) & ~all & LINE[our_king][s];
+                // Double pawn pushes (only pawns on rank 3/6 are eligible)
+                b3 = shift<relative_dir<Us>(NORTH)>(b2 &
+                                                    MASK_RANK[relative_rank<Us>(RANK3)]) &
+                     ~all & LINE[our_king][s];
+                list = make<QUIET>(s, b2, list);
+                list = make<DOUBLE_PUSH>(s, b3, list);
+            }
+        }
+
+        // Pinned knights cannot move anywhere, so we're done with pinned pieces!
+
+        break;
     }
 
     // Non-pinned knight moves
@@ -761,8 +762,8 @@ Move* Position::generate_legals(Move* list) {
 template <Color Us>
 class MoveList {
 public:
-    explicit MoveList(Position& p) :
-        last(p.generate_legals<Us>(list)) { }
+    explicit MoveList(Position& p):
+        last(p.generate_legals<Us>(list)) {}
 
     const Move* begin() const { return list; }
     const Move* end() const { return last; }

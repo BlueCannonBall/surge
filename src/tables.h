@@ -56,14 +56,14 @@ constexpr Bitboard attacks(Square s, Bitboard occ) {
 // gk (needs at least c++14)
 constexpr Bitboard attacks(PieceType pt, Square s, Bitboard occ) {
     switch (pt) {
-        case ROOK:
-            return attacks<ROOK>(s, occ);
-        case BISHOP:
-            return attacks<BISHOP>(s, occ);
-        case QUEEN:
-            return attacks<QUEEN>(s, occ);
-        default:
-            return PSEUDO_LEGAL_ATTACKS[pt][s];
+    case ROOK:
+        return attacks<ROOK>(s, occ);
+    case BISHOP:
+        return attacks<BISHOP>(s, occ);
+    case QUEEN:
+        return attacks<QUEEN>(s, occ);
+    default:
+        return PSEUDO_LEGAL_ATTACKS[pt][s];
     }
 }
 
