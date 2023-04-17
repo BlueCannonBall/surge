@@ -71,6 +71,12 @@ std::string Position::fen() const {
 
 // Moves a piece to a (possibly empty) square on the board and updates the hash
 void Position::move_piece(Square from, Square to) {
+    deactivate_piece_hook(board[from], from, data);
+    if (board[to] != NO_PIECE) {
+        deactivate_piece_hook(board[to], to, data);
+    }
+    activate_piece_hook(board[from], to, data);
+
     hash ^= zobrist::table[board[from]][from] ^ zobrist::table[board[from]][to] ^ zobrist::table[board[to]][to];
     Bitboard mask = SQUARE_BB[from] | SQUARE_BB[to];
     piece_bb[board[from]] ^= mask;
@@ -81,6 +87,9 @@ void Position::move_piece(Square from, Square to) {
 
 // Moves a piece to an empty square. Note that it is an error if the <to> square contains a piece
 void Position::move_piece_quiet(Square from, Square to) {
+    deactivate_piece_hook(board[from], from, data);
+    activate_piece_hook(board[from], to, data);
+
     hash ^= zobrist::table[board[from]][from] ^ zobrist::table[board[from]][to];
     piece_bb[board[from]] ^= (SQUARE_BB[from] | SQUARE_BB[to]);
     board[to] = board[from];

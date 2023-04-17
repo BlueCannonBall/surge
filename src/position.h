@@ -2,6 +2,7 @@
 
 #include "tables.h"
 #include "types.h"
+#include <functional>
 #include <ostream>
 #include <sstream>
 #include <string>
@@ -95,6 +96,13 @@ public:
     // generate_moves() is called
     Bitboard pinned;
 
+    // User data passed to callbacks. Useful for implementing NNUE
+    void* data;
+
+    // Callbacks
+    std::function<void(Piece piece, Square sq, void*)> activate_piece_hook;
+    std::function<void(Piece piece, Square sq, void*)> deactivate_piece_hook;
+
     // gk adapted order of initialization
     // gk   Position() : piece_bb{ 0 }, side_to_play(WHITE), game_ply(0), board{},
     // gk       hash(0), pinned(0), checkers(0) {
@@ -105,7 +113,10 @@ public:
         hash(0),
         game_ply(0),
         checkers(0),
-        pinned(0) {
+        pinned(0),
+        data(nullptr),
+        activate_piece_hook([](Piece, Square, void*) {}),
+        deactivate_piece_hook([](Piece, Square, void*) {}) {
         // Sets all squares on the board as empty
         for (int i = 0; i < 64; i++) board[i] = NO_PIECE;
         history[0] = UndoInfo();
@@ -159,6 +170,7 @@ public:
     // Places a piece on a particular square and updates the hash. Placing a piece on a square that is
     // already occupied is an error
     inline void put_piece(Piece pc, Square s) {
+        activate_piece_hook(pc, s, data);
         board[s] = pc;
         piece_bb[pc] |= SQUARE_BB[s];
         hash ^= zobrist::table[pc][s];
@@ -166,6 +178,7 @@ public:
 
     // Removes a piece from a particular square and updates the hash.
     inline void remove_piece(Square s) {
+        deactivate_piece_hook(board[s], s, data);
         hash ^= zobrist::table[board[s]][s];
         piece_bb[board[s]] &= ~SQUARE_BB[s];
         board[s] = NO_PIECE;
