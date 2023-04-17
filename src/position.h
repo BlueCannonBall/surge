@@ -96,10 +96,10 @@ public:
     // generate_moves() is called
     Bitboard pinned;
 
-    // User data passed to callbacks. Useful for implementing NNUE
+    // User data passed to hooks. Useful for implementing NNUE
     void* data;
 
-    // Callbacks
+    // Hooks
     std::function<void(Piece piece, Square sq, void*)> activate_piece_hook;
     std::function<void(Piece piece, Square sq, void*)> deactivate_piece_hook;
 
