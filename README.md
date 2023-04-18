@@ -11,23 +11,23 @@
 ![perft(6)](perft(6).png)
 
 ### Getting Started:
-```c++
+```cpp
 #include "position.h"
 #include "tables.h"
 #include "types.h"
+#include <iostream>
 
 int main() {
     initialise_all_databases();
     zobrist::initialise_zobrist_keys();
 	
-    Position p;
-    Position::set("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -", p);
-    std::cout << p; 
-  
-    MoveList<WHITE> list(p)
-  
-    for(Move m : list) {
-        std::cout << m << "\n";
+    Position p("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -");
+    std::cout << p;
+
+    MoveList<WHITE> list(p);
+
+    for (Move m : list) {
+        std::cout << m << std::endl;
     }
     
     return 0;
