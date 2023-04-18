@@ -60,12 +60,12 @@ std::string Position::fen() const {
 
     fen << (side_to_play == WHITE ? " w " : " b ");
     if (history[game_ply].entry & ALL_CASTLING_MASK) {
+        fen << '-';
+    } else {
         fen << (history[game_ply].entry & WHITE_OO_MASK ? "" : "K")
             << (history[game_ply].entry & WHITE_OOO_MASK ? "" : "Q")
             << (history[game_ply].entry & BLACK_OO_MASK ? "" : "k")
             << (history[game_ply].entry & BLACK_OOO_MASK ? "" : "q");
-    } else {
-        fen << '-';
     }
     fen << (history[game_ply].epsq == NO_SQUARE ? "-" : SQSTR[history[game_ply].epsq])
         << " 0 1";
