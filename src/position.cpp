@@ -58,13 +58,16 @@ std::string Position::fen() const {
         if (i > 0) fen << '/';
     }
 
-    fen << (side_to_play == WHITE ? " w " : " b ")
-        << (history[game_ply].entry & WHITE_OO_MASK ? "" : "K")
-        << (history[game_ply].entry & WHITE_OOO_MASK ? "" : "Q")
-        << (history[game_ply].entry & BLACK_OO_MASK ? "" : "k")
-        << (history[game_ply].entry & BLACK_OOO_MASK ? "" : "q")
-        << (history[game_ply].entry & ALL_CASTLING_MASK ? "- " : " ")
-        << (history[game_ply].epsq == NO_SQUARE ? "-" : SQSTR[history[game_ply].epsq])
+    fen << (side_to_play == WHITE ? " w " : " b ");
+    if (history[game_ply].entry & ALL_CASTLING_MASK) {
+        fen << (history[game_ply].entry & WHITE_OO_MASK ? "" : "K")
+            << (history[game_ply].entry & WHITE_OOO_MASK ? "" : "Q")
+            << (history[game_ply].entry & BLACK_OO_MASK ? "" : "k")
+            << (history[game_ply].entry & BLACK_OOO_MASK ? "" : "q");
+    } else {
+        fen << '-';
+    }
+    fen << (history[game_ply].epsq == NO_SQUARE ? "-" : SQSTR[history[game_ply].epsq])
         << " 0 1";
 
     return fen.str();
