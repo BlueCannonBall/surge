@@ -215,9 +215,9 @@ public:
     }
 
     template <Color C>
-    void play(Move m);
+    void play(Move m = Move());
     template <Color C>
-    void undo(Move m);
+    void undo(Move m = Move());
 
     template <Color Us>
     Move* generate_legals(Move* list);
